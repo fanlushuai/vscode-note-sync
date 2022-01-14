@@ -51,7 +51,7 @@
         "noteSync.enableNoteSync": {
           "type": "boolean",
           "description": "you can open note sync plugin with true",
-          "default": true
+          "default": false
         },
         "noteSync.timeout": {
           "type": "number",
