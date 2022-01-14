@@ -31,7 +31,19 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [],
+    "commands": [
+      {
+				"command": "note-sync.sync",
+				"title": "sync"
+			}
+    ],
+    "keybindings": [
+			{
+				"command": "note-sync.sync",
+				"key": "ctrl+k+s",
+				"mac": "ctrl+k+s"
+			}
+		],
     "configuration": {
       "title": "Note Sync",
       "type": "object",
@@ -39,12 +51,17 @@
         "noteSync.enableNoteSync": {
           "type": "boolean",
           "description": "you can open note sync plugin with true",
-          "default": false
+          "default": true
         },
         "noteSync.timeout": {
           "type": "number",
           "description": "timeout to synchronization projects",
-          "default": 10000
+          "default": 50000
+        },
+        "noteSync.shortDelayTime": {
+          "type": "number",
+          "description": "timeout to synchronization projects when triggered by command. ",
+          "default": 1000
         },
         "noteSync.shell": {
           "type": "string",

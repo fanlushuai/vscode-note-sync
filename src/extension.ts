@@ -1,13 +1,11 @@
 import * as vscode from 'vscode';
-import { NoteSyncExtension } from './note-sync'
+import { NoteSyncExtension } from './note-sync';
 export function activate(context: vscode.ExtensionContext) {
-	let config = vscode.workspace.getConfiguration('noteSync')
-	let isActive = config.enableNoteSync
-	let noteSync = new NoteSyncExtension(context)
+	let noteSync = new NoteSyncExtension(context);
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(() => {
 			//这里只做一件事情 就是重新刷新配置
-			noteSync.loadConfig()
+			noteSync.loadConfig();
 		}),
 		//  todo 添加命令active插件 
 		//  {
@@ -36,12 +34,12 @@ export function activate(context: vscode.ExtensionContext) {
 		// }),
 
 		vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
-			//文件保存后要做的事情放这里
-			if (isActive) {
-				noteSync.pushCode()
-			}
+			noteSync.pushGitWithLongDelay();
 		}),
-	)
+		vscode.commands.registerCommand('note-sync.sync', () => {
+			noteSync.pushGitWithShortDelay();
+		})
+	);
 
 	// return extension
 }

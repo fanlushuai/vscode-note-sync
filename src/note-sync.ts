@@ -15,7 +15,7 @@ export class NoteSyncExtension {
         this.showEnablingChannelMessage();
 
         context.subscriptions.push(this.channel);
-        this.pullCode()
+        this.pullCode();
     }
     private showEnablingChannelMessage() {
         let message = `Note Sync is ${this.getEnabled() ? "enabled" : "disabled"}`;
@@ -95,7 +95,11 @@ export class NoteSyncExtension {
         }) as Promise<void>;
     }
     //提交笔记
-    pushCode() {
+    private pushCode(timeout: number = 5000) {
+        if (!this.getEnabled()) {
+            return;
+        }
+
         //添加缓存
         if (this.timer != undefined) {
             clearTimeout(this.timer);
@@ -139,7 +143,17 @@ export class NoteSyncExtension {
                     }
                     resolve();
                 });
-            }, this.config.timeout ?? 5000);
+            }, timeout);
         }) as Promise<void>;
+    }
+
+    //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
+    pushGitWithShortDelay() {
+        this.pushCode(this.config.shortDelayTime || 1 * 1000);
+    }
+
+    //用于文本保存时触发。
+    pushGitWithLongDelay() {
+        this.pushCode(this.config.timeout || 5 * 1000);
     }
 }
