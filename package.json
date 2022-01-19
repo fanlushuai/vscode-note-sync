@@ -1,21 +1,17 @@
 {
   "name": "note-sync",
-  "displayName": "Note Sync",
-  "description": "Note Sync（笔记同步）",
-  "version": "1.0.2",
+  "displayName": "Note Sync(base 1.0.2-forked)",
+  "description": "workspace sync to github or gitlab",
+  "version": "1.0.2-auh",
   "license": "MIT",
-  "publisher": "JSShou",
-  "icon": "images/logo.png",
-  "homepage": "https://github.com/xuzhongpeng/vscode-note-sync",
+  "publisher": "auh",
+  "homepage": "https://github.com/fanlushuai/vscode-note-sync",
   "engines": {
     "vscode": "^1.50.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xuzhongpeng/vscode-note-sync"
-  },
-  "bugs": {
-    "url": "https://github.com/xuzhongpeng/vscode-note-sync/issues"
+    "url": "https://github.com/fanlushuai/vscode-note-sync"
   },
   "keywords": [
     "github笔记同步",
