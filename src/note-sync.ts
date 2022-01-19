@@ -29,11 +29,11 @@ export class NoteSyncExtension {
     }
     //判断插件是否开启
     getEnabled(): boolean {
-        // return (
-        //     !!this.context.globalState.get("enabled", true) &&
-        //     !!this.config.enableNoteSync
-        // );
-        return true;
+        return (
+            !!this.context.globalState.get("enabled", true) &&
+            !!this.config.enableNoteSync
+        );
+        // return true;
     }
     //右下角弹框提示
     private showChannelMessage(message: string) {
