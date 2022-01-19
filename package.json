@@ -1,6 +1,6 @@
 {
-  "name": "note-sync",
-  "displayName": "Note Sync(base 1.0.2-forked)",
+  "name": "note-sync-forked",
+  "displayName": "Note Sync(forked)",
   "description": "workspace sync to github or gitlab",
   "version": "1.0.0",
   "license": "MIT",
