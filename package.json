@@ -2,7 +2,7 @@
   "name": "note-sync",
   "displayName": "Note Sync(base 1.0.2-forked)",
   "description": "workspace sync to github or gitlab",
-  "version": "1.0.2-auh",
+  "version": "1.0.0",
   "license": "MIT",
   "publisher": "auh",
   "homepage": "https://github.com/fanlushuai/vscode-note-sync",
