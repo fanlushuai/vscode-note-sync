@@ -52,7 +52,7 @@
         "noteSync.longDelayTime": {
           "type": "number",
           "description": "longDelayTime to synchronization projects",
-          "default": 50000
+          "default": 10000
         },
         "noteSync.shortDelayTime": {
           "type": "number",

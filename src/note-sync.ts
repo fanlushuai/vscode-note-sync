@@ -9,10 +9,12 @@ export class NoteSyncExtension {
     );
     // private commandProcessor: CommandProcessor = new CommandProcessor()
     private timer!: any;
+    private commentQueue: Array<string>;
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
         this.loadConfig();
         this.showEnablingChannelMessage();
+        this.commentQueue=[];
 
         context.subscriptions.push(this.channel);
         this.pullCode();
@@ -27,11 +29,11 @@ export class NoteSyncExtension {
     }
     //判断插件是否开启
     getEnabled(): boolean {
-        return (
-            !!this.context.globalState.get("enabled", true) &&
-            !!this.config.enableNoteSync
-        );
-        // return true;
+        // return (
+        //     !!this.context.globalState.get("enabled", true) &&
+        //     !!this.config.enableNoteSync
+        // );
+        return true;
     }
     //右下角弹框提示
     private showChannelMessage(message: string) {
@@ -147,17 +149,18 @@ export class NoteSyncExtension {
         }) as Promise<void>;
     }
 
-    getPushCommit(pushCommitAppend: string = '') {
-        return (this.config.pushCommit ?? "note sync plugin synchronization") + pushCommitAppend;
+    getPushCommit() {
+        return (this.config.pushCommit ?? "note sync plugin synchronization") + (this.commentQueue.shift() ?? '');
     }
 
     //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
     pushGitWithLongDelay() {
-        this.pushCode(this.config.shortDelayTime || 1 * 1000, this.getPushCommit());
+        this.pushCode(this.config.longDelayTime || 5 * 1000, this.getPushCommit());
     }
 
     //用于文本保存时触发。
-    pushGitWithShortDelay(pushCommitAppend: string='') {
-        this.pushCode(this.config.longDelayTime || 5 * 1000, this.getPushCommit(pushCommitAppend));
+    pushGitWithShortDelay(pushCommitAppend: string = '') {
+        this.commentQueue.push(pushCommitAppend);
+        this.pushCode(this.config.shortDelayTime || 1 * 1000, this.getPushCommit());
     }
 }
