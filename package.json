@@ -53,9 +53,9 @@
           "description": "you can open note sync plugin with true",
           "default": false
         },
-        "noteSync.timeout": {
+        "noteSync.longDelayTime": {
           "type": "number",
-          "description": "timeout to synchronization projects",
+          "description": "longDelayTime to synchronization projects",
           "default": 50000
         },
         "noteSync.shortDelayTime": {
