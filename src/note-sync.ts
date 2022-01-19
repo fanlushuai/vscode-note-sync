@@ -41,7 +41,7 @@ export class NoteSyncExtension {
     private showStatusMessage(message: string) {
         let disposable = vscode.window.setStatusBarMessage(
             message,
-            this.config.get("timeout") || 1000
+            this.config.get("longDelayTime") || 1000
         );
         this.context.subscriptions.push(disposable);
     }
@@ -96,7 +96,7 @@ export class NoteSyncExtension {
         }) as Promise<void>;
     }
     //提交笔记
-    private pushCode(timeout: number = 5000, pushComment: string = "note sync plugin synchronization") {
+    private pushCode(delayTime: number = 5000, pushComment: string = "note sync plugin synchronization") {
         if (!this.getEnabled()) {
             return;
         }
@@ -143,7 +143,7 @@ export class NoteSyncExtension {
                     }
                     resolve();
                 });
-            }, timeout);
+            }, delayTime);
         }) as Promise<void>;
     }
 
@@ -158,6 +158,6 @@ export class NoteSyncExtension {
 
     //用于文本保存时触发。
     pushGitWithShortDelay(pushCommitAppend: string='') {
-        this.pushCode(this.config.timeout || 5 * 1000, this.getPushCommit(pushCommitAppend));
+        this.pushCode(this.config.longDelayTime || 5 * 1000, this.getPushCommit(pushCommitAppend));
     }
 }
