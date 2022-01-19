@@ -36,8 +36,13 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
 			noteSync.pushGitWithLongDelay();
 		}),
-		vscode.commands.registerCommand('note-sync.sync', () => {
-			noteSync.pushGitWithShortDelay();
+		vscode.commands.registerCommand('note-sync.sync', async () => {
+			const INPUT = vscode.window.showInputBox({
+				placeHolder: 'input string will append to git commit comment'
+			});	
+
+			let inputComentAppend=await INPUT;
+			noteSync.pushGitWithShortDelay(inputComentAppend);
 		})
 	);
 

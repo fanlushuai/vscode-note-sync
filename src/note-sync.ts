@@ -31,6 +31,7 @@ export class NoteSyncExtension {
             !!this.context.globalState.get("enabled", true) &&
             !!this.config.enableNoteSync
         );
+        // return true;
     }
     //右下角弹框提示
     private showChannelMessage(message: string) {
@@ -95,24 +96,23 @@ export class NoteSyncExtension {
         }) as Promise<void>;
     }
     //提交笔记
-    private pushCode(timeout: number = 5000) {
+    private pushCode(timeout: number = 5000, pushComment: string = "note sync plugin synchronization") {
         if (!this.getEnabled()) {
             return;
         }
 
         //添加缓存
-        if (this.timer != undefined) {
+        if (this.timer !== undefined) {
             clearTimeout(this.timer);
         }
         return new Promise((resolve) => {
             this.timer = setTimeout(() => {
                 this.timer = undefined;
                 let path = vscode.workspace.rootPath;
-                console.log(path)
-                let pushCommit = this.config.pushCommit ?? "note sync plugin synchronization"
+                console.log(path);
                 let pushShell =
                     this.pullCommand() ??
-                    `git -C "${path}" add .&&git -C "${path}" commit -m "${pushCommit}"&&git -C "${path}" push -u origin HEAD`;
+                    `git -C "${path}" add .&&git -C "${path}" commit -m "${pushComment}"&&git -C "${path}" push -u origin HEAD`;
                 // sleep ${this.config.timeout}&
                 console.log(pushShell);
 
@@ -135,7 +135,7 @@ export class NoteSyncExtension {
                         this.showStatusMessage(this.config.finishStatusMessage);
                     }
                     if (e !== 0) {
-                        if (error.indexOf("git pull ...") != -1) {
+                        if (error.indexOf("git pull ...") !== -1) {
                             this.pullCode();
                         } else {
                             this.showStatusMessage("note sync err");
@@ -147,13 +147,17 @@ export class NoteSyncExtension {
         }) as Promise<void>;
     }
 
+    getPushCommit(pushCommitAppend: string = '') {
+        return (this.config.pushCommit ?? "note sync plugin synchronization") + pushCommitAppend;
+    }
+
     //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
-    pushGitWithShortDelay() {
-        this.pushCode(this.config.shortDelayTime || 1 * 1000);
+    pushGitWithLongDelay() {
+        this.pushCode(this.config.shortDelayTime || 1 * 1000, this.getPushCommit());
     }
 
     //用于文本保存时触发。
-    pushGitWithLongDelay() {
-        this.pushCode(this.config.timeout || 5 * 1000);
+    pushGitWithShortDelay(pushCommitAppend: string='') {
+        this.pushCode(this.config.timeout || 5 * 1000, this.getPushCommit(pushCommitAppend));
     }
 }
