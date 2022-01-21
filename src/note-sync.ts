@@ -14,7 +14,7 @@ export class NoteSyncExtension {
         this.context = context;
         this.loadConfig();
         this.showEnablingChannelMessage();
-        this.commentQueue=[];
+        this.commentQueue = [];
 
         context.subscriptions.push(this.channel);
         this.pullCode();
@@ -98,7 +98,7 @@ export class NoteSyncExtension {
         }) as Promise<void>;
     }
     //提交笔记
-    private pushCode(delayTime: number = 5000, pushComment: string = "note sync plugin synchronization") {
+    private pushCode(delayTime: number = 5000) {
         if (!this.getEnabled()) {
             return;
         }
@@ -112,9 +112,11 @@ export class NoteSyncExtension {
                 this.timer = undefined;
                 let path = vscode.workspace.rootPath;
                 console.log(path);
+                let pushComment = this.config.pushCommit ?? "note sync plugin synchronization";
+                let commentAppend = this.commentQueue[0] ?? '';
                 let pushShell =
                     this.pushCommand() ??
-                    `git -C "${path}" add .&&git -C "${path}" commit -m "${pushComment}"&&git -C "${path}" push -u origin HEAD`;
+                    `git -C "${path}" add .&&git -C "${path}" commit -m "${pushComment} ${commentAppend}"&&git -C "${path}" push -u origin HEAD`;
                 // sleep ${this.config.timeout}&
                 console.log(pushShell);
 
@@ -124,9 +126,13 @@ export class NoteSyncExtension {
                 }
                 //同步
                 let error = "";
+                let info = "";
                 let child = this.execShellCommand(pushShell);
-                child?.stdout?.on("data", (data) =>
-                    this.channel.append(data.toString())
+                child?.stdout?.on("data", (data) => {
+                    info += data;
+                    this.channel.append(data.toString());
+                }
+
                 );
                 child?.stderr?.on("data", (data) => {
                     error += data;
@@ -134,13 +140,16 @@ export class NoteSyncExtension {
                 });
                 child.on("exit", (e) => {
                     if (e === 0 && this.config.finishStatusMessage) {
-                        this.showStatusMessage(this.config.finishStatusMessage);
+                        this.showStatusMessage(this.config.finishStatusMessage + ' ' + commentAppend);
                         //消息消费成功，再销毁。主要解决，存在触发提交，但是并没有提交任何代码的情况。导致追加消息动作并不能真实提交给远程仓库。
                         this.commentQueue.shift();
                     }
                     if (e !== 0) {
                         if (error.indexOf("git pull ...") !== -1) {
                             this.pullCode();
+                        } else if (info.indexOf("Your branch is up to date with") !== -1) {
+                            // 排除情况。当执行一次无效的提交，会出现Your branch is up to date with 'origin/main'。这主要是因为，通过快捷键主动触发的方式导致。这是无关紧要的。
+                            this.showStatusMessage("note sync (nothing to upload)");
                         } else {
                             this.showStatusMessage("note sync err");
                         }
@@ -151,26 +160,22 @@ export class NoteSyncExtension {
         }) as Promise<void>;
     }
 
-    getPushCommit() {
-        return (this.config.pushCommit ?? "note sync plugin synchronization") + (this.commentQueue[0] ?? '');
-    }
-
     //用于文本保存时触发。
     pushGitWithLongDelay() {
-        this.pushCode(this.config.longDelayTime || 5 * 1000, this.getPushCommit());
+        this.pushCode(this.config.longDelayTime || 5 * 1000);
     }
 
     //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
     pushGitWithShortDelay() {
-        this.pushCode(this.config.shortDelayTime || 1 * 1000, this.getPushCommit());
+        this.pushCode(this.config.shortDelayTime || 1 * 1000);
     }
 
-    requireAction(futureCommentAppend: string = ''){
+    requireAction(futureCommentAppend: string = '') {
         this.commentQueue.push(futureCommentAppend);
         this.pushGitWithShortDelay();
     }
-    
-    getDefaultAction(){
+
+    getDefaultAction() {
         return this.config.defaultAction || '';
     }
 

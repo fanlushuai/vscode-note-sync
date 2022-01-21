@@ -1,7 +1,9 @@
 # Change Log
 
 ## [1.0.1]
-Adapt to original repo version 1.0.3.
+1. 优化逻辑过程。命令变更，使用syncQuckly 和requireAction替换sync。
+
+2. Adapt to original repo version 1.0.3.
 
 > source repo log:
 > [1.0.3]

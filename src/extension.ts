@@ -37,9 +37,14 @@ export function activate(context: vscode.ExtensionContext) {
 			noteSync.pushGitWithLongDelay();
 		}),
 		vscode.commands.registerCommand('note-sync.syncQuickly', async () => {
+			vscode.commands.executeCommand('workbench.action.files.save');
+
 			noteSync.pushGitWithShortDelay();
+
 		}),
 		vscode.commands.registerCommand('note-sync.requireAction', async () => {
+			vscode.commands.executeCommand('workbench.action.files.save');
+
 			if (noteSync.getDefaultAction() === '') {
 				const INPUT = vscode.window.showInputBox({
 					placeHolder: 'input string will append to git comment of the nearest time in the future'
