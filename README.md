@@ -28,8 +28,8 @@ It is recommended to open the '. Vscode > Settings' in the project that needs to
 {
   "noteSync.enableNoteSync": true,
   "noteSync.pullStatusMessage": "Note pulling",
-  "noteSync.runningStatusMessage": "Notes uploading",
-  "noteSync.finishStatusMessage": "Note upload complete",
+  "noteSync.pushStatusMessage": "Notes uploading",
+  "noteSync.finishStatusMessage": "Note sync complete", //同步完成，包含，下拉同步，以及上传同步。统称同步。即进行过一次同步操作。
 }
 ```
 ## License

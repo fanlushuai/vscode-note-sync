@@ -113,7 +113,7 @@ export class NoteSyncExtension {
                 let path = vscode.workspace.rootPath;
                 console.log(path);
                 let pushShell =
-                    this.pullCommand() ??
+                    this.pushCommand() ??
                     `git -C "${path}" add .&&git -C "${path}" commit -m "${pushComment}"&&git -C "${path}" push -u origin HEAD`;
                 // sleep ${this.config.timeout}&
                 console.log(pushShell);
