@@ -1,36 +1,33 @@
 # Note Sync - VSCode Extension
 Fork from https://github.com/xuzhongpeng/vscode-note-sync
-Add Fearture Append special comment for my blog deploy。and push after a short delay time by vscode command。
-## Features(功能)
-1. 打开笔记后自动同步代码（建议在需要使用该插件的项目中在`.vscode->settings`中配置`noteSync.enableNoteSync`:`true`，否则不运行此插件，为了使用其它项目的时候的性能和安全）
-2. 保存代码后自动Push代码到Github或者Gitlab
-3. 使用命令sync，弹出输入框，直接enter或者输入追加的，git comment。
+感谢原作者。以使得脚本小子可以飞一会儿。
+因为个人觉得个人想法未必成熟，以及原作者独立的想法存在，故而选择独立发版。还请原作者理解。
 
-注意：3，可以用于联动github 用来拦截action的执行。workflow push 事件下，通过提交消息决定是否deloy，action build blog等action场景。
+## foked添加功能
 
-```
-在github aciton中可以加入这样的条件。
-    if: ${{ contains(github.event.head_commit.message, '#deploy') }}
-```
+1. 提供触发命令。独立快速同步。主动触发。解决问题：原作者版本通过onfilesave的被动触发。并且因为提交频率太高，不得不慢速。导致没有快速的可能性。也没有某些情况需要快速触发的可能性。
 
-## Attention（注意）
+2. 触发github workflow。可以通过追加提交信息的方式。配合github。实现工作流。解决问题：比如 云端工作流的控制优化。
 
-It is recommended to open the '. Vscode > Settings' in the project that needs to use the plug-in` noteSync.enableNoteSync `Otherwise, the plug-in will not be run. In order to use the performance and security opened by other projects
+注意：功能2，因为触发的行为，需要push向远程，在仓库无新代码push的时候，追加的提交信息控制，将会在下一个实际push的时候追加上去。即，action动作是延迟在下一个push存在变更数据的操作上。队列保存在内存。重启失效。
 
-建议在需要使用该插件的项目中在`.vscode->settings`中配置`noteSync.enableNoteSync`:`true`，否则不运行此插件，为了使用其它项目开启的性能和安全
+## 基本使用配置
 
-## Configuration
-
-
-## Sample Configuration
+创建.vscode/settings.json。文件，输入配置
 
 ```
+
 {
   "noteSync.enableNoteSync": true,
   "noteSync.pullStatusMessage": "Note pulling",
-  "noteSync.pushStatusMessage": "Notes uploading",
-  "noteSync.finishStatusMessage": "Note sync complete", //同步完成，包含，下拉同步，以及上传同步。统称同步。即进行过一次同步操作。
+  "noteSync.runningStatusMessage": "Notes uploading",
+  "noteSync.finishStatusMessage": "Note upload complete",
 }
+
 ```
-## License
-MIT
+
+开启插件工作状态。
+
+提醒：找不到请新建。主要目的为了保证此危险插件干扰其他正常本地仓库。
+
+更详细的配置，参考vscode，功能贡献。
