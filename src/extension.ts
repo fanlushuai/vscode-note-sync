@@ -36,13 +36,20 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
 			noteSync.pushGitWithLongDelay();
 		}),
-		vscode.commands.registerCommand('note-sync.sync', async () => {
-			const INPUT = vscode.window.showInputBox({
-				placeHolder: 'input string will append to git commit comment'
-			});	
+		vscode.commands.registerCommand('note-sync.syncQuickly', async () => {
+			noteSync.pushGitWithShortDelay();
+		}),
+		vscode.commands.registerCommand('note-sync.requireAction', async () => {
+			if (noteSync.getDefaultAction() === '') {
+				const INPUT = vscode.window.showInputBox({
+					placeHolder: 'input string will append to git comment of the nearest time in the future'
+				});
 
-			let inputComentAppend=await INPUT;
-			noteSync.pushGitWithShortDelay(inputComentAppend);
+				let inputString = await INPUT;
+				noteSync.requireAction(inputString);
+			} else {
+				noteSync.requireAction(noteSync.getDefaultAction());
+			}
 		})
 	);
 

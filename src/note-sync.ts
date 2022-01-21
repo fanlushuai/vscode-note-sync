@@ -135,6 +135,8 @@ export class NoteSyncExtension {
                 child.on("exit", (e) => {
                     if (e === 0 && this.config.finishStatusMessage) {
                         this.showStatusMessage(this.config.finishStatusMessage);
+                        //消息消费成功，再销毁。主要解决，存在触发提交，但是并没有提交任何代码的情况。导致追加消息动作并不能真实提交给远程仓库。
+                        this.commentQueue.shift();
                     }
                     if (e !== 0) {
                         if (error.indexOf("git pull ...") !== -1) {
@@ -150,17 +152,26 @@ export class NoteSyncExtension {
     }
 
     getPushCommit() {
-        return (this.config.pushCommit ?? "note sync plugin synchronization") + (this.commentQueue.shift() ?? '');
+        return (this.config.pushCommit ?? "note sync plugin synchronization") + (this.commentQueue[0] ?? '');
     }
 
-    //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
+    //用于文本保存时触发。
     pushGitWithLongDelay() {
         this.pushCode(this.config.longDelayTime || 5 * 1000, this.getPushCommit());
     }
 
-    //用于文本保存时触发。
-    pushGitWithShortDelay(pushCommitAppend: string = '') {
-        this.commentQueue.push(pushCommitAppend);
+    //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
+    pushGitWithShortDelay() {
         this.pushCode(this.config.shortDelayTime || 1 * 1000, this.getPushCommit());
     }
+
+    requireAction(futureCommentAppend: string = ''){
+        this.commentQueue.push(futureCommentAppend);
+        this.pushGitWithShortDelay();
+    }
+    
+    getDefaultAction(){
+        return this.config.defaultAction || '';
+    }
+
 }

@@ -29,15 +29,24 @@
   "contributes": {
     "commands": [
       {
-				"command": "note-sync.sync",
-				"title": "sync"
+				"command": "note-sync.syncQuickly",
+				"title": "syncQuickly"
+			},
+      {
+				"command": "note-sync.requireAction",
+				"title": "requireAction"
 			}
     ],
     "keybindings": [
 			{
-				"command": "note-sync.sync",
+				"command": "note-sync.syncQuickly",
 				"key": "ctrl+k+s",
 				"mac": "ctrl+k+s"
+			},
+      {
+				"command": "note-sync.requireAction",
+				"key": "ctrl+k+a",
+				"mac": "ctrl+k+a"
 			}
 		],
     "configuration": {
@@ -77,6 +86,11 @@
         "noteSync.pushCommand": {
           "type": "string",
           "description": "Specify the command to be executed after file saved.",
+          "default": null
+        },
+        "noteSync.defaultAction": {
+          "type": "string",
+          "description": "Jump input required for require action，use this as default. set this like `#deploy`",
           "default": null
         },
         "noteSync.pullStatusMessage": {
