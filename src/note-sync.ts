@@ -140,7 +140,7 @@ export class NoteSyncExtension {
                 });
                 child.on("exit", (e) => {
                     if (e === 0 && this.config.finishStatusMessage) {
-                        this.showStatusMessage(this.config.finishStatusMessage + ' ' + commentAppend);
+                        this.showStatusMessage(this.config.finishStatusMessage + '(' + commentAppend + '-Done)');
                         //消息消费成功，再销毁。主要解决，存在触发提交，但是并没有提交任何代码的情况。导致追加消息动作并不能真实提交给远程仓库。
                         this.commentQueue.shift();
                     }
@@ -148,8 +148,13 @@ export class NoteSyncExtension {
                         if (error.indexOf("git pull ...") !== -1) {
                             this.pullCode();
                         } else if (info.indexOf("Your branch is up to date with") !== -1) {
-                            // 排除情况。当执行一次无效的提交，会出现Your branch is up to date with 'origin/main'。这主要是因为，通过快捷键主动触发的方式导致。这是无关紧要的。
-                            this.showStatusMessage("note sync (nothing to upload)");
+                            if (commentAppend !== '') {
+                                // 提醒并没有真正触发，需要等到下一个周期
+                                this.showChannelMessage(this.config.finishStatusMessage + '(' + commentAppend + '-Next )');
+                            } else {
+                                // 排除情况。当执行一次无效的提交，会出现Your branch is up to date with 'origin/main'。这主要是因为，通过快捷键主动触发的方式导致。这是无关紧要的。
+                                this.showStatusMessage(this.config.finishStatusMessage + "(Nothing upload)");
+                            }
                         } else {
                             this.showStatusMessage("note sync err");
                         }
