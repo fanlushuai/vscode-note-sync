@@ -156,7 +156,7 @@ export class NoteSyncExtension {
                                 this.showStatusMessage(this.config.finishStatusMessage + "(Nothing upload)");
                             }
                         } else {
-                            this.showStatusMessage("note sync err");
+                            this.showStatusMessage(this.config.finishStatusMessage + "(Error!)");
                         }
                     }
                     resolve();
@@ -176,7 +176,11 @@ export class NoteSyncExtension {
     }
 
     requireAction(futureCommentAppend: string = '') {
-        this.commentQueue.push(futureCommentAppend);
+        //不存在再添加。保证未来相同任务只有一次
+        if (this.commentQueue.indexOf(futureCommentAppend) < 0) {
+            this.commentQueue.push(futureCommentAppend);
+        }
+
         this.pushGitWithShortDelay();
     }
 
