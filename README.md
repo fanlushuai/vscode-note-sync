@@ -9,7 +9,7 @@ Fork from https://github.com/xuzhongpeng/vscode-note-sync
 
 注：与原作者版本对比：1都具备。2的部分，独有。
 
-## 安装
+## 开启
 创建.vscode/settings.json，输入配置
 
 ```
