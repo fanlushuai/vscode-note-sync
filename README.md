@@ -3,10 +3,8 @@ Fork from https://github.com/xuzhongpeng/vscode-note-sync
 
 ## 功能
 1. 无感知的git仓库同步。相当于云盘同步。
-2. 主动命令触发。用于解决一些，比如，马上要关机走人，快速同步一下的需求。
-3. 可追加commitmsg，来操控github workflow。如追加，#deploy blog ，配合github workflow使用
-
-注：与原作者版本对比：添加了2，3的部分。
+2. **[本fork新增]**主动命令触发。用于解决一些，比如，马上要关机走人，快速同步一下的需求。
+3. **[本fork新增]**可追加commitmsg，来操控github workflow。如追加，#deploy blog ，配合github workflow使用
 
 ## 开启
 1. 创建.vscode/settings.json，输入配置
