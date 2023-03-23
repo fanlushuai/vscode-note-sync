@@ -172,6 +172,7 @@ export class NoteSyncExtension {
 
     //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
     pushGitWithShortDelay() {
+        flushEventStack();
         this.pushCode(this.config.shortDelayTime || 1 * 1000);
     }
 
@@ -188,4 +189,14 @@ export class NoteSyncExtension {
         return this.config.defaultAction || '';
     }
 
+
 }
+
+function flushEventStack() {
+    // this is a sleep timer for 0 seconds, which sounds dumb
+    // the reason it's useful is because it puts a function on the BOTTOM of the javascript event stack
+    // and then we wait for it to occur
+    // this means runs all of the already-scheduled things to occur
+    // which is ideal because it makes pop ups and other events happen in a more sequential/timely order
+    return new Promise((r) => setTimeout(r, 0));
+  } 
