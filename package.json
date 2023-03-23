@@ -30,7 +30,7 @@
     "commands": [
       {
 				"command": "note-sync.syncQuickly",
-				"title": "syncQuickly"
+				"title": "sync note Quickly"
 			}
     ],
     "keybindings": [
