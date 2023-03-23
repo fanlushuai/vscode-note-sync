@@ -11,7 +11,7 @@ Fork from https://github.com/xuzhongpeng/vscode-note-sync
 注：与原作者版本对比：添加了2，3的部分。
 
 ## 开启
-创建.vscode/settings.json，输入配置
+1. 创建.vscode/settings.json，输入配置
 
 ```
 {
@@ -22,7 +22,7 @@ Fork from https://github.com/xuzhongpeng/vscode-note-sync
 }
 ```
 
-开启插件工作状态。
+2. 开启插件工作状态。
 
 提醒：找不到请新建。采用工作区创建文件的方式开启。主要目的为了保证此危险插件干扰其他正常本地仓库。
 
@@ -55,16 +55,6 @@ jobs:
 3. 配合github。追加commit msg，用于配合远程github workflow检测。（比如控制workflow的执行开关）
 
 ## 特别说明：
-### 关于主动push命令即时性的问题：
-在实际执行上，发现了一个有趣的现象。调用了showinputbox的注册命令。执行的速度延迟会更低。更快。
-
-所以，syncquickly这个命令，实际上，没有requireAction快。虽然他们触发的提交速度都是基于shortDelayTime.
-
-这一点让我很费解。无力深入研究vscode深入的，调度机制。但是，js的单线程调度机制，也是delaytime不准确的原因。
-
-所以，猜测，vscode可能进一步进行了调整。
-
-所以在使用上，建议，只使用requireAction命令即可，在inputbox不输入即可。
 
 ### 追加commit msg会发生在一次真正的push上
 在仓库无新代码push的时候，追加的提交信息控制，将会在下一个实际push的时候追加上去。即，action动作是延迟在下一个push存在变更数据的操作上。队列保存在内存。重启失效。
