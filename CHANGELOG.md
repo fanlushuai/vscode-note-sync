@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.0.2]
+仅仅保留syncQuckly 命令。快速同步&追加commit msg 
+
 ## [1.0.1]
 1. 优化逻辑过程。命令变更，使用syncQuckly 和requireAction替换sync。
 
