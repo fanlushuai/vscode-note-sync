@@ -171,8 +171,8 @@ export class NoteSyncExtension {
     }
 
     //提供其他触发。可以绑定命令，绑定其他快捷键。设置超时时间。
+    //short delay受到 js 底层调度的影响，并不能很及时。必须一些其他操作才能。
     pushGitWithShortDelay() {
-        flushEventStack();
         this.pushCode(this.config.shortDelayTime || 1 * 1000);
     }
 

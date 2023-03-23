@@ -39,6 +39,9 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('note-sync.syncQuickly', async () => {
 			vscode.commands.executeCommand('workbench.action.files.save');
 
+			//尝试调用这个，使得加速启动
+			vscode.window.setStatusBarMessage("git go");
+			
 			noteSync.pushGitWithShortDelay();
 
 		}),
