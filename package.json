@@ -36,8 +36,7 @@
     "keybindings": [
 			{
 				"command": "note-sync.syncQuickly",
-				"key": "ctrl+k ctrl+s",
-				"mac": "ctrl+k ctrl+s"
+				"key": "ctrl+k ctrl+a"
 			}
 		],
     "configuration": {
