@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// 	noteSync.pushGitWithShortDelay();
 		// }),
 		
-		vscode.commands.registerCommand('note-sync.syncRightNow', async () => {
+		vscode.commands.registerCommand('note-sync.syncQuickly', async () => {
 			vscode.commands.executeCommand('workbench.action.files.save');
 
 			if (noteSync.getDefaultAction() === '') {
