@@ -2,7 +2,7 @@
   "name": "note-sync-forked",
   "displayName": "Note Sync(forked)",
   "description": "workspace sync to github or gitlab",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "publisher": "auh",
   "homepage": "https://github.com/fanlushuai/vscode-note-sync",
@@ -31,10 +31,6 @@
       {
 				"command": "note-sync.syncQuickly",
 				"title": "syncQuickly"
-			},
-      {
-				"command": "note-sync.requireAction",
-				"title": "requireAction"
 			}
     ],
     "keybindings": [
@@ -42,11 +38,6 @@
 				"command": "note-sync.syncQuickly",
 				"key": "ctrl+k ctrl+s",
 				"mac": "ctrl+k ctrl+s"
-			},
-      {
-				"command": "note-sync.requireAction",
-				"key": "ctrl+k ctrl+a",
-				"mac": "ctrl+k ctrl+a"
 			}
 		],
     "configuration": {
@@ -60,7 +51,7 @@
         },
         "noteSync.longDelayTime": {
           "type": "number",
-          "description": "longDelayTime to synchronization projects",
+          "description": "longDelayTime to synchronization projects when triggered by file save",
           "default": 10000
         },
         "noteSync.shortDelayTime": {
