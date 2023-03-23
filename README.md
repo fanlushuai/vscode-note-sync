@@ -1,41 +1,63 @@
 # Note Sync - VSCode Extension
 Fork from https://github.com/xuzhongpeng/vscode-note-sync
-感谢原作者。以使得脚本小子可以飞一会儿。
-因为个人觉得个人想法未必成熟，以及原作者独立的想法存在，故而选择独立发版。还请原作者理解。
 
-## Forked 添加功能
+感谢原作者。因为个人觉得个人想法未必成熟，以及原作者独立的想法存在，故而选择独立发版。还请原作者理解。
 
-1. 提供触发命令。独立快速同步。主动触发。解决问题：原作者版本通过onfilesave的被动触发。并且因为提交频率太高，不得不慢速。导致没有快速的可能性。也没有某些情况需要快速触发的可能性。
+## 功能
+1. 无感知的git仓库同步。相当于云盘同步。
+2. 主动命令触发。用于解决一些，比如，马上要关机走人，快速同步一下的需求。还有就是，追加commitmsg，来操控github workflow。
 
-2. 触发github workflow。可以通过追加提交信息的方式。配合github。实现工作流。解决问题：比如 云端工作流的控制优化。
+注：与原作者版本对比：1都具备。2的部分，独有。
 
-  注意：功能2，因为触发的行为，需要push向远程，在仓库无新代码push的时候，追加的提交信息控制，将会在下一个实际push的时候追加上去。即，action动作是延迟在下一个push存在变更数据的操作上。队列保存在内存。重启失效。
-
-## 基本使用配置
-
-创建.vscode/settings.json。文件，输入配置
+## 开启
+创建.vscode/settings.json，输入配置
 
 ```
-
 {
   "noteSync.enableNoteSync": true,
   "noteSync.pullStatusMessage": "Note pulling",
   "noteSync.pushStatusMessage": "Notes uploading",
   "noteSync.finishStatusMessage": "Note sync complete",
 }
-
 ```
 
 开启插件工作状态。
 
-提醒：找不到请新建。主要目的为了保证此危险插件干扰其他正常本地仓库。
+提醒：找不到请新建。采用工作区创建文件的方式开启。主要目的为了保证此危险插件干扰其他正常本地仓库。
 
-更详细的配置，参考vscode，功能贡献。
+## 使用
+1. 配置开启，即可感受自动同步的功能。
 
-## 使用建议：
-逻辑功能上，本插件没有任何问题。
+2. 主动触发。命令syncquickly。
 
-但是，在实际执行上，发现了一个有趣的现象。调用了showinputbox的注册命令。执行的速度延迟会更低。更快。
+3. 主动触发&追加commit msg。命令requireAction
+
+注意：操控github workflow，需要在ci文件中。加入commit msg的判断。比如：
+```
+
+xxxxx 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    if: ${{ contains(github.event.head_commit.message, '#deploy blog') }}
+    steps:
+      xxxxxx
+```
+
+## 执行逻辑
+### a. 何时pull？
+1. 开机启动，自动pull远程。
+2. push时，出现远程分支冲突，自动pull远程。
+
+### b. 何时push？
+1. 被动无感知push。文件保存的时候，会push。（这个push时间不会那么即时）
+2. 主动有目的push。调用命令，会push。 （可以即时一点）
+3. 配合github。追加commit msg，用于配合远程github workflow检测。（比如控制workflow的执行开关）
+
+## 特别说明：
+### 关于主动push命令即时性的问题：
+在实际执行上，发现了一个有趣的现象。调用了showinputbox的注册命令。执行的速度延迟会更低。更快。
 
 所以，syncquickly这个命令，实际上，没有requireAction快。虽然他们触发的提交速度都是基于shortDelayTime.
 
@@ -43,12 +65,7 @@ Fork from https://github.com/xuzhongpeng/vscode-note-sync
 
 所以，猜测，vscode可能进一步进行了调整。
 
-使用建议：
+所以在使用上，建议，只使用requireAction命令即可，在inputbox不输入即可。
 
-如果想要实现，快速的触发。直接调用requireAcion命令，不要输入inputbox直接回车即可。
-
-同时，需要触发action的，需要添加追加备注的，不要设置默认的action。因为这会跳过inputbox。导致慢速。
-
-但是，这属于奇淫技巧。遵循原本设计的逻辑，也是没问题的。至少在原始作者插件的版本上，已经好很多了。
-
-鉴于，目前个人还无法理解这其中的原因。所以，不做逻辑调整。附上建议。期望，更好的体验。
+### 追加commit msg会发生在一次真正的push上
+在仓库无新代码push的时候，追加的提交信息控制，将会在下一个实际push的时候追加上去。即，action动作是延迟在下一个push存在变更数据的操作上。队列保存在内存。重启失效。
