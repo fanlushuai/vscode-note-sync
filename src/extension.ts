@@ -36,16 +36,14 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
 			noteSync.pushGitWithLongDelay();
 		}),
-		vscode.commands.registerCommand('note-sync.syncQuickly', async () => {
-			vscode.commands.executeCommand('workbench.action.files.save');
+		
+		// vscode.commands.registerCommand('note-sync.syncQuickly', async () => {
+		// 	vscode.commands.executeCommand('workbench.action.files.save');
 
-			//尝试调用这个，使得加速启动
-			vscode.window.setStatusBarMessage("git go");
-			
-			noteSync.pushGitWithShortDelay();
-
-		}),
-		vscode.commands.registerCommand('note-sync.requireAction', async () => {
+		// 	noteSync.pushGitWithShortDelay();
+		// }),
+		
+		vscode.commands.registerCommand('note-sync.syncRightNow', async () => {
 			vscode.commands.executeCommand('workbench.action.files.save');
 
 			if (noteSync.getDefaultAction() === '') {
