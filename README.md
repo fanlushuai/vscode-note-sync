@@ -1,8 +1,6 @@
 # Note Sync - VSCode Extension
 Fork from https://github.com/xuzhongpeng/vscode-note-sync
 
-感谢原作者。因为个人觉得个人想法未必成熟，以及原作者独立的想法存在，故而选择独立发版。还请原作者理解。
-
 ## 功能
 1. 无感知的git仓库同步。相当于云盘同步。
 2. 主动命令触发。用于解决一些，比如，马上要关机走人，快速同步一下的需求。
